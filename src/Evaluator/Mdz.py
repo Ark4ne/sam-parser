@@ -14,17 +14,12 @@ class Mdz(Evaluator):
 
         cigar = read.cigar
 
-        if cigar == '100M':
-            add = read.additional
-
-            if "MD:Z" in add:
-                if add["MD:Z"] == "100":
-                    return Status.MAPPED
-                else:
-                    return Status.PARTIAL
-            else:
-                return Status.PARTIAL  # TODO check
-        elif cigar == '*':
+        if cigar == '*':
             return Status.UNMAPPED
         else:
+            add = read.additional
+
+            if "MD:Z" in add and add["MD:Z"] == "100":
+                return Status.MAPPED
+
             return Status.PARTIAL
